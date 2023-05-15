@@ -12,12 +12,7 @@
 	PdhAddCounter(idleQuery, L"\\Processor(_Total)\\% Idle Time", NULL, &idleCounter);
 	PdhCollectQueryData(idleQuery);
 
-	// To sleep for Half a  second to get a different value
-	Sleep(500);
-
-	// To get new value and calculate CPU usage
-	PDH_FMT_COUNTERVALUE counterVal;
-	PdhCollectQueryData(idleQuery);
+	
 	PdhGetFormattedCounterValue(idleCounter, PDH_FMT_DOUBLE, NULL, &counterVal);
 	double cpuUsage = 100.0 - counterVal.doubleValue;
 
