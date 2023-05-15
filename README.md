@@ -5,35 +5,24 @@
 
 ### Learning Objectives
 
-This Example demonstrates the keyboard and mouse event of openFrameworks.
+// To get handle to the processor idle time performance counter
+	PDH_HQUERY idleQuery;
+	PDH_HCOUNTER idleCounter;
+	PdhOpenQuery(NULL, NULL, &idleQuery);
+	PdhAddCounter(idleQuery, L"\\Processor(_Total)\\% Idle Time", NULL, &idleCounter);
+	PdhCollectQueryData(idleQuery);
 
-After studying this example, you'll understand how to trigger events and retrieve information from events such as mouse behavior, cursor position, which mouse button is pressed or what key is pressed.
+	// To sleep for Half a  second to get a different value
+	Sleep(500);
 
-In the code, pay attention to:
+	// To get new value and calculate CPU usage
+	PDH_FMT_COUNTERVALUE counterVal;
+	PdhCollectQueryData(idleQuery);
+	PdhGetFormattedCounterValue(idleCounter, PDH_FMT_DOUBLE, NULL, &counterVal);
+	double cpuUsage = 100.0 - counterVal.doubleValue;
 
-* Different commands to access the current time information: ```ofGetTimestampString()``` and ```ofGetElapsedTimeMillis()```
-* Access individual key information: ```keyReleased(int key)```
-*									 ```keyPressed(int key)```
-* Access mouse information: ```mouseMoved(int x, int y )```
-*							```mouseDragged(int x, int y, int button)```
-*							```mousePressed(int x, int y, int button)```
-*							```mouseReleased(int x, int y, int button)```
-* Access information about the window size when resizing: ```windowResized(int w, int h)```
+	// Print CPU usage to console
+	cout << "CPU Usage: " << cpuUsage << "%" << endl;
 
+	return cpuUsage;
 
-### Expected Behavior
-
-
-When launching this app, you should see a screen with
-
-* a text display of the current time, the elapsed time in milliseconds, the current event being triggered
-
-
-Instructions for use:
-
-* Press  keys to see how their corresponding labels are displayed. Manipulate the mouse to see how different mouse events are triggered.
-
-
-### Other classes used in this file
-
-This Example uses no other classes.
